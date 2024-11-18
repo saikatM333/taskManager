@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: task_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://user:password@db:5432/task_db
+    depends_on:
+      - db
+volumes:
+  postgres_data:
